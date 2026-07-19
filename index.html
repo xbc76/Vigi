@@ -252,6 +252,7 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
 .year-nav span { font-size: 18px; font-weight: 800; color: var(--text); }
 
 /* ===== COLLAPSIBLE CONFIG SECTIONS ===== */
+.time-picker-btn { width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:14px;outline:none;font-family:inherit;text-align:left;cursor:pointer; }
 .subtab-bar { display: flex; gap: 5px; margin-bottom: 14px; }
 .subtab-btn { flex: 1; min-width: 0; background: var(--bg3); border: 1px solid var(--border); color: var(--text2); border-radius: 12px; padding: 7px 3px; font-size: 10.5px; font-weight: 700; white-space: normal; line-height: 1.2; text-align: center; cursor: pointer; font-family: var(--font); }
 .subtab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -531,8 +532,8 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
         </div>
         <div class="cfg-section-body">
           <div class="info-row"><span class="ir-label">Aplicación</span><span class="ir-val">Vigi <span style="color:var(--accent);">Studio</span></span></div>
-          <div class="info-row"><span class="ir-label">Versión</span><span class="ir-val" onclick="handleVersionTap()" style="cursor:pointer;user-select:none;">v-1.03.034</span></div>
-          <div class="info-row" id="info-row-date" style="display:none;"><span class="ir-label">Última actualización</span><span class="ir-val">15/07/2026</span></div>
+          <div class="info-row"><span class="ir-label">Versión</span><span class="ir-val" onclick="handleVersionTap()" style="cursor:pointer;user-select:none;">v-1.03.039</span></div>
+          <div class="info-row" id="info-row-date" style="display:none;"><span class="ir-label">Última actualización</span><span class="ir-val">18/07/2026</span></div>
           <div class="info-row"><span class="ir-label">Desarrollador</span><span class="ir-val">Xavibc</span></div>
         </div>
       </div>
@@ -593,7 +594,7 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
             <label>Año</label>
             <button type="button" onclick="openPdfYearPicker()" id="pdf-year-btn" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:14px;outline:none;font-family:inherit;text-align:left;cursor:pointer;">2026</button>
           </div>
-          <div class="field"><label>Perfil</label><select id="pdf-profile-single"></select></div>
+          <div class="field"><label>Perfil</label><input type="hidden" id="pdf-profile-single"><button type="button" onclick="openPdfProfilePicker()" id="pdf-profile-single-btn" class="time-picker-btn">Elegir perfil</button></div>
           <div class="field"><label>Observaciones (opcional)</label><textarea id="pdf-observaciones-a" rows="3" placeholder="Se mostrará en el PDF solo si escribes algo aquí" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:14px;font-family:var(--font);resize:vertical;"></textarea></div>
         </div>
 
@@ -635,8 +636,8 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
                 <div class="field" style="flex:0 0 auto;width:60px;display:flex;flex-direction:column;"><label>Color</label><input type="color" id="t-color" value="#1a56a0" style="flex:1;width:100%;padding:2px 4px;height:auto;"></div>
               </div>
               <div class="row">
-                <div class="field"><label>Entrada</label><input type="time" id="t-inicio" value="06:00"></div>
-                <div class="field"><label>Salida</label><input type="time" id="t-fin" value="14:00"></div>
+                <div class="field"><label>Entrada</label><input type="hidden" id="t-inicio" value="06:00"><button type="button" onclick="openTimePicker('t-inicio')" id="t-inicio-btn" class="time-picker-btn">06:00</button></div>
+                <div class="field"><label>Salida</label><input type="hidden" id="t-fin" value="14:00"><button type="button" onclick="openTimePicker('t-fin')" id="t-fin-btn" class="time-picker-btn">14:00</button></div>
               </div>
               <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:8px;user-select:none;">
                 <input type="checkbox" id="t-split-chk" onchange="toggleShiftSplit(this.checked)" style="width:17px;height:17px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;">
@@ -645,8 +646,8 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
               <div id="t-split-section" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px;">
                 <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Segundo tramo</div>
                 <div class="row">
-                  <div class="field"><label>Entrada 2</label><input type="time" id="t-inicio2" value=""></div>
-                  <div class="field"><label>Salida 2</label><input type="time" id="t-fin2" value=""></div>
+                  <div class="field"><label>Entrada 2</label><input type="hidden" id="t-inicio2" value=""><button type="button" onclick="openTimePicker('t-inicio2')" id="t-inicio2-btn" class="time-picker-btn">--:--</button></div>
+                  <div class="field"><label>Salida 2</label><input type="hidden" id="t-fin2" value=""><button type="button" onclick="openTimePicker('t-fin2')" id="t-fin2-btn" class="time-picker-btn">--:--</button></div>
                 </div>
               </div>
               <button class="btn btn-primary btn-full" onclick="addShift()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Añadir turno</button>
@@ -788,8 +789,8 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
         </div>
         <div class="cfg-section-body">
           <div class="row">
-            <div class="field"><label>Inicio nocturno</label><input type="time" id="cfg-night-start" value="22:00" onchange="saveConfig()"></div>
-            <div class="field"><label>Fin nocturno</label><input type="time" id="cfg-night-end" value="06:00" onchange="saveConfig()"></div>
+            <div class="field"><label>Inicio nocturno</label><input type="hidden" id="cfg-night-start" value="22:00"><button type="button" onclick="openTimePicker('cfg-night-start', saveConfig)" id="cfg-night-start-btn" class="time-picker-btn">22:00</button></div>
+            <div class="field"><label>Fin nocturno</label><input type="hidden" id="cfg-night-end" value="06:00"><button type="button" onclick="openTimePicker('cfg-night-end', saveConfig)" id="cfg-night-end-btn" class="time-picker-btn">06:00</button></div>
           </div>
           <p class="text-muted-sm">Las horas trabajadas en este rango se contabilizarán como horas nocturnas.</p>
         </div>
@@ -823,6 +824,44 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       <span>Ajustes</span>
     </button>
+  </div>
+</div>
+
+<!-- TIME PICKER MODAL (hora/minuto) — themed replacement for native <input type="time"> -->
+<div class="modal-overlay" id="time-picker-overlay">
+  <div class="modal">
+    <h3>Hora</h3>
+    <div class="triple-drum-wrap">
+      <div class="drum-col" style="flex:1;">
+        <div class="drum-col-label">Hora</div>
+        <div class="drum-container" id="tp-drum-h-wrap">
+          <div class="drum-sel-band"></div>
+          <div class="drum-track" id="tp-drum-h"></div>
+        </div>
+      </div>
+      <div class="drum-col" style="flex:1;">
+        <div class="drum-col-label">Min</div>
+        <div class="drum-container" id="tp-drum-m-wrap">
+          <div class="drum-sel-band"></div>
+          <div class="drum-track" id="tp-drum-m"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="document.getElementById('time-picker-overlay').classList.remove('show')">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmTimePicker()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- PDF: PROFILE PICKER MODAL (annual) — themed replacement for native <select> -->
+<div class="modal-overlay" id="pdf-profile-picker-overlay">
+  <div class="modal">
+    <h3>Perfil</h3>
+    <div id="pdf-profile-picker-list" style="max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:12px;"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-full" onclick="document.getElementById('pdf-profile-picker-overlay').classList.remove('show')">Cerrar</button>
+    </div>
   </div>
 </div>
 
@@ -950,8 +989,8 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
       <div class="field" style="flex:0 0 auto;width:60px;display:flex;flex-direction:column;"><label>Color</label><input type="color" id="es-color" style="flex:1;width:100%;padding:2px 4px;height:auto;"></div>
     </div>
     <div class="row">
-      <div class="field"><label>Entrada</label><input type="time" id="es-inicio"></div>
-      <div class="field"><label>Salida</label><input type="time" id="es-fin"></div>
+      <div class="field"><label>Entrada</label><input type="hidden" id="es-inicio"><button type="button" onclick="openTimePicker('es-inicio')" id="es-inicio-btn" class="time-picker-btn">--:--</button></div>
+      <div class="field"><label>Salida</label><input type="hidden" id="es-fin"><button type="button" onclick="openTimePicker('es-fin')" id="es-fin-btn" class="time-picker-btn">--:--</button></div>
     </div>
     <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:8px;user-select:none;">
       <input type="checkbox" id="es-split-chk" onchange="document.getElementById('es-split-section').style.display=this.checked?'block':'none'" style="width:17px;height:17px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;">
@@ -960,8 +999,8 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
     <div id="es-split-section" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px;">
       <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Segundo tramo</div>
       <div class="row">
-        <div class="field"><label>Entrada 2</label><input type="time" id="es-inicio2"></div>
-        <div class="field"><label>Salida 2</label><input type="time" id="es-fin2"></div>
+        <div class="field"><label>Entrada 2</label><input type="hidden" id="es-inicio2"><button type="button" onclick="openTimePicker('es-inicio2')" id="es-inicio2-btn" class="time-picker-btn">--:--</button></div>
+        <div class="field"><label>Salida 2</label><input type="hidden" id="es-fin2"><button type="button" onclick="openTimePicker('es-fin2')" id="es-fin2-btn" class="time-picker-btn">--:--</button></div>
       </div>
     </div>
     <div class="modal-actions">
@@ -2029,6 +2068,14 @@ function applyTheme(id, save=true) {
   document.body.setAttribute('data-theme', id);
   state.config.theme = id;
   if (save) { saveData(); renderThemeGrid(); }
+  // The calendar, shift/special lists and the report all color text using
+  // getSafeShiftColor(), which depends on which theme is active — without
+  // re-rendering them here they'd keep showing colors computed for the
+  // PREVIOUS theme until something else happened to redraw them.
+  renderCuadrante();
+  renderShifts();
+  renderSpecials();
+  renderResumen();
 }
 
 // =========================================================
@@ -2091,8 +2138,8 @@ function addShift() {
   document.getElementById('t-nombre').value = '';
   document.getElementById('t-split-chk').checked = false;
   document.getElementById('t-split-section').style.display = 'none';
-  document.getElementById('t-inicio2').value = '';
-  document.getElementById('t-fin2').value = '';
+  setTimeValue('t-inicio2', '');
+  setTimeValue('t-fin2', '');
 }
 function deleteShift(idx) { state.shifts.splice(idx,1); saveData(); renderShifts(); renderCuadrante(); }
 function editShift(idx) {
@@ -2102,13 +2149,13 @@ function editShift(idx) {
   document.getElementById('es-letra').value  = s.letra;
   document.getElementById('es-nombre').value = s.nombre;
   document.getElementById('es-color').value  = s.color;
-  document.getElementById('es-inicio').value = s.inicio;
-  document.getElementById('es-fin').value    = s.fin;
+  setTimeValue('es-inicio', s.inicio);
+  setTimeValue('es-fin', s.fin);
   const hasSplit = !!(s.inicio2 && s.fin2);
   document.getElementById('es-split-chk').checked = hasSplit;
   document.getElementById('es-split-section').style.display = hasSplit ? 'block' : 'none';
-  document.getElementById('es-inicio2').value = s.inicio2 || '';
-  document.getElementById('es-fin2').value    = s.fin2    || '';
+  setTimeValue('es-inicio2', s.inicio2 || '');
+  setTimeValue('es-fin2', s.fin2 || '');
   document.getElementById('edit-shift-overlay').classList.add('show');
 }
 function saveEditShift() {
@@ -2137,13 +2184,13 @@ function renderShifts() {
   document.getElementById('shift-list').innerHTML = state.shifts.map((s,i) => {
     const h1 = calcShiftHours(s.inicio, s.fin);
     const h2 = (s.inicio2 && s.fin2) ? calcShiftHours(s.inicio2, s.fin2) : 0;
-    const totalH = (h1 + h2).toFixed(1);
+    const totalH = fmtHours(h1 + h2);
     const hoursLabel = s.inicio2
       ? `${s.inicio}–${s.fin} + ${s.inicio2}–${s.fin2} · ${totalH}h`
       : `${s.inicio}–${s.fin} · ${totalH}h`;
     const badge = s.inicio2 ? ' <span style="font-size:9px;background:var(--accent);color:#fff;border-radius:4px;padding:1px 5px;vertical-align:middle;margin-left:4px;">Partido</span>' : '';
     return `<div class="shift-item">
-      <div class="shift-letter" style="background:${s.color}25;color:${s.color};border:2px solid ${s.color};">${s.letra}</div>
+      <div class="shift-letter" style="background:${getSafeShiftColor(s.color)}25;color:${getSafeShiftColor(s.color)};border:2px solid ${getSafeShiftColor(s.color)};">${s.letra}</div>
       <div class="shift-info">
         <div class="si-name">${escapeHtml(s.nombre)}${badge}</div>
         <div class="si-hours">${hoursLabel}</div>
@@ -2481,7 +2528,7 @@ function editSpecial(idx) {
   document.getElementById('esp-nombre').value = s.nombre;
   document.getElementById('esp-color').value  = s.color;
   const hours = getSpecialHours(s);
-  document.getElementById('esp-horas').value  = s.usesFormula ? hours.toFixed(3) : hours;
+  document.getElementById('esp-horas').value  = s.usesFormula ? fmtHours(hours, 3) : hours;
   // Lock letra and nombre fields for fixed shifts (their identity must not change)
   document.getElementById('esp-letra').disabled  = !!s.fixed;
   document.getElementById('esp-letra').style.opacity  = s.fixed ? '.5' : '1';
@@ -2543,10 +2590,10 @@ function renderSpecials() {
       ? '' // Fixed shifts: no delete/reset button in the list — reset now lives inside the edit modal
       : `<button class="btn btn-danger btn-sm" onclick="deleteSpecial(${i})">✕</button>`;
     return `<div class="shift-item">
-      <div class="shift-letter" style="background:${s.color}25;color:${s.color};border:2px solid ${s.color};">${s.letra}</div>
+      <div class="shift-letter" style="background:${getSafeShiftColor(s.color)}25;color:${getSafeShiftColor(s.color)};border:2px solid ${getSafeShiftColor(s.color)};">${s.letra}</div>
       <div class="shift-info">
         <div class="si-name">${escapeHtml(s.nombre)}${formulaBadge}</div>
-        <div class="si-hours">Computa: ${s.usesFormula ? hours.toFixed(3) : hours.toFixed(1)}h/día</div>
+        <div class="si-hours">Computa: ${s.usesFormula ? fmtHours(hours, 3) : fmtHours(hours)}h/día</div>
       </div>
       <div style="display:flex;gap:4px;">
         <button class="btn btn-ghost btn-sm" onclick="editSpecial(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4L18.5 2.5z"/></svg></button>
@@ -2563,6 +2610,77 @@ function renderSpecials() {
 // PUNCTUAL DATE PICKER — reuses buildOneDrum / daysInMonth
 // =========================================================
 let punctualDate = { day:1, month:1, year:new Date().getFullYear() };
+
+// =========================================================
+// THEMED TIME PICKER — replaces native <input type="time">, whose popup
+// is drawn by the OS/browser and can't be restyled to match the app's
+// theme. The underlying field stays a real (hidden) input so every
+// existing `.value` read elsewhere in the app keeps working unchanged;
+// this picker just becomes the only way to change it.
+// =========================================================
+let timePickerTargetId = null;
+let timePickerCallback = null;
+let tpHour = 0, tpMinute = 0;
+
+function setTimeValue(id, val) {
+  const input = document.getElementById(id);
+  if (input) input.value = val;
+  const btn = document.getElementById(id + '-btn');
+  if (btn) btn.textContent = val || '--:--';
+}
+
+function openTimePicker(targetId, onConfirm) {
+  timePickerTargetId = targetId;
+  timePickerCallback = onConfirm || null;
+  const current = document.getElementById(targetId).value || '00:00';
+  const [h, m] = current.split(':').map(Number);
+  tpHour = h || 0; tpMinute = m || 0;
+  const hours = Array.from({length: 24}, (_, i) => i);
+  const minutes = Array.from({length: 60}, (_, i) => i);
+  buildOneDrum('tp-drum-h', 'tp-drum-h-wrap', hours, tpHour, v => { tpHour = v; }, v => String(v).padStart(2,'0'));
+  buildOneDrum('tp-drum-m', 'tp-drum-m-wrap', minutes, tpMinute, v => { tpMinute = v; }, v => String(v).padStart(2,'0'));
+  document.getElementById('time-picker-overlay').classList.add('show');
+}
+
+function confirmTimePicker() {
+  if (!timePickerTargetId) return;
+  const val = String(tpHour).padStart(2,'0') + ':' + String(tpMinute).padStart(2,'0');
+  setTimeValue(timePickerTargetId, val);
+  document.getElementById('time-picker-overlay').classList.remove('show');
+  if (timePickerCallback) timePickerCallback();
+  timePickerTargetId = null;
+  timePickerCallback = null;
+}
+
+// =========================================================
+// PDF ANNUAL — themed profile picker (mirrors the existing profile
+// switcher modal) replacing a native <select>, whose open dropdown list
+// is also drawn by the OS/browser and can't be themed.
+// =========================================================
+function openPdfProfilePicker() {
+  const list = document.getElementById('pdf-profile-picker-list');
+  const currentId = document.getElementById('pdf-profile-single').value;
+  list.innerHTML = profiles.map((p, i) => {
+    const color = PROFILE_COLORS[i % PROFILE_COLORS.length];
+    const isSel = p.id === currentId;
+    return `<div onclick="selectPdfProfile('${p.id}')" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:${isSel?'var(--accent)':'var(--bg3)'};border:1px solid ${isSel?'var(--accent)':'var(--border)'};cursor:pointer;">
+      <div style="width:30px;height:30px;border-radius:50%;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;">${profileInitial(p)}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:${isSel?'#fff':'var(--text)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(profileDisplayName(p))}</div>
+        <div style="font-size:11px;color:${isSel?'rgba(255,255,255,.8)':'var(--text3)'};">${p.codigo ? p.codigo+' · ' : ''}${p.jornada}% jornada</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('pdf-profile-picker-overlay').classList.add('show');
+}
+
+function selectPdfProfile(id) {
+  const p = profiles.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('pdf-profile-single').value = id;
+  document.getElementById('pdf-profile-single-btn').textContent = profileDisplayName(p);
+  document.getElementById('pdf-profile-picker-overlay').classList.remove('show');
+}
 
 function openPunctualDatePicker() {
   const today = new Date();
@@ -2680,8 +2798,8 @@ function addDefaultHolidays() {
 // =========================================================
 function loadConfigUI() {
   document.getElementById('cfg-hours-month').value = state.config.hoursPerMonth;
-  document.getElementById('cfg-night-start').value = state.config.nightStart;
-  document.getElementById('cfg-night-end').value   = state.config.nightEnd;
+  setTimeValue('cfg-night-start', state.config.nightStart);
+  setTimeValue('cfg-night-end', state.config.nightEnd);
   updateAnnualHoursDisplay();
   // Set CCAA label
   const lbl = document.getElementById('ccaa-select-label');
@@ -2694,7 +2812,7 @@ function updateAnnualHoursDisplay() {
   const el = document.getElementById('cfg-hours-annual-display');
   if (!el) return;
   const annual = (state.config.hoursPerMonth || 0) * 11;
-  el.textContent = `${annual % 1 === 0 ? annual : annual.toFixed(1)}h`;
+  el.textContent = `${fmtHours(annual)}h`;
 }
 function saveConfig() {
   state.config.hoursPerMonth = parseFloat(document.getElementById('cfg-hours-month').value) || 162;
@@ -2752,8 +2870,8 @@ function renderCuadrante() {
         const shift1   = slot1 ? getShiftByLetra(slot1.letra) : null;
         const shift2   = slot2 ? getShiftByLetra(slot2.letra) : null;
         let fg1='var(--text2)', fg2='var(--text2)';
-        if (shift1) fg1=shift1.color;
-        if (shift2) fg2=shift2.color;
+        if (shift1) fg1=getSafeShiftColor(shift1.color);
+        if (shift2) fg2=getSafeShiftColor(shift2.color);
         const dayColor = isHol ? 'var(--holiday)' : 'var(--text2)';
         const isLongLetras = slot2 && (slot1.letra.length > 1 || slot2.letra.length > 1);
         const dualFontSize = isLongLetras ? '9px' : '11px';
@@ -2892,12 +3010,12 @@ function renderBulkAssignChips() {
     const isSpecial = !!state.specials.find(sp => sp.letra === s.letra);
     const disabled = slot === 2 && isSpecial;
     return `<div style="display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:8px;
-      background:${isSel ? s.color : s.color+'18'};
-      border:2px solid ${isSel ? s.color : s.color+'55'};
+      background:${isSel ? getSafeShiftColor(s.color) : getSafeShiftColor(s.color)+'18'};
+      border:2px solid ${isSel ? getSafeShiftColor(s.color) : getSafeShiftColor(s.color)+'55'};
       cursor:${disabled?'not-allowed':'pointer'};
       opacity:${disabled?'.35':'1'};transition:all .15s;"
       ${disabled ? '' : `onclick="selectBulkSlot(${slot},'${s.letra}')"`}>
-      <span style="color:${isSel?'#fff':s.color};font-weight:800;font-size:15px;">${s.letra}</span>
+      <span style="color:${isSel?'#fff':getSafeShiftColor(s.color)};font-weight:800;font-size:15px;">${s.letra}</span>
       <span style="color:${isSel?'#fff':'var(--text2)'};font-size:11px;">${escapeHtml(s.nombre)}</span>
     </div>`;
   };
@@ -3004,12 +3122,12 @@ function renderCellChips() {
     // Disable specials in slot2 (they can't share a day) and also if slot1 is special, disable slot2 entirely
     const disabled = slot === 2 && isSpecial;
     return `<div style="display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:8px;
-      background:${isSel ? s.color : s.color+'18'};
-      border:2px solid ${isSel ? s.color : s.color+'55'};
+      background:${isSel ? getSafeShiftColor(s.color) : getSafeShiftColor(s.color)+'18'};
+      border:2px solid ${isSel ? getSafeShiftColor(s.color) : getSafeShiftColor(s.color)+'55'};
       cursor:${disabled?'not-allowed':'pointer'};
       opacity:${disabled?'.35':'1'};transition:all .15s;"
       ${disabled ? '' : `onclick="selectSlotShift(${slot},'${s.letra}')"`}>
-      <span style="color:${isSel?'#fff':s.color};font-weight:800;font-size:15px;">${s.letra}</span>
+      <span style="color:${isSel?'#fff':getSafeShiftColor(s.color)};font-weight:800;font-size:15px;">${s.letra}</span>
       <span style="color:${isSel?'#fff':'var(--text2)'};font-size:11px;">${escapeHtml(s.nombre)}</span>
     </div>`;
   };
@@ -3353,25 +3471,25 @@ function getHoursForSlot(slot, shift) {
 function getCombinedHoursLabel(slot1, shift1, slot2, shift2) {
   const h1 = getHoursForSlot(slot1, shift1);
   const h2 = getHoursForSlot(slot2, shift2);
-  return (h1 + h2).toFixed(1) + 'h';
+  return fmtHours(h1 + h2) + 'h';
 }
 function getShiftHoursLabel(shift) {
   if (!shift) return '0h';
   if (shift.inicio) {
     const h1 = calcShiftHours(shift.inicio, shift.fin);
     const h2 = (shift.inicio2 && shift.fin2) ? calcShiftHours(shift.inicio2, shift.fin2) : 0;
-    return (h1 + h2).toFixed(1) + 'h';
+    return fmtHours(h1 + h2) + 'h';
   }
-  return getSpecialHours(shift).toFixed(1) + 'h';
+  return fmtHours(getSpecialHours(shift)) + 'h';
 }
 function getCellHoursLabel(slot, shift) {
   if (!slot) return '';
   if (slot.split) {
     const h1 = (slot.split.e1 && slot.split.s1) ? calcShiftHours(slot.split.e1, slot.split.s1) : 0;
     const h2 = (slot.split.e2 && slot.split.s2) ? calcShiftHours(slot.split.e2, slot.split.s2) : 0;
-    return (h1+h2).toFixed(1)+'h';
+    return fmtHours(h1+h2)+'h';
   }
-  return getHoursForSlot(slot, shift).toFixed(1) + 'h';
+  return fmtHours(getHoursForSlot(slot, shift)) + 'h';
 }
 
 // Returns array of {inicio, fin} segments for a slot
@@ -3578,22 +3696,22 @@ function renderMonthStats() {
   document.getElementById('stats-monthly').innerHTML = `
     <div class="stat-box ok-box">
       <div class="stat-label">Horas trabajadas</div>
-      <div class="stat-val">${stats.total.toFixed(1)}h</div>
+      <div class="stat-val">${fmtHours(stats.total)}h</div>
       <div class="stat-sub">Cómputo: ${target}h</div>
     </div>
     <div class="stat-box ${extra>0?'extra-box':''}">
       <div class="stat-label">Horas extras</div>
-      <div class="stat-val">${extra.toFixed(1)}h</div>
-      <div class="stat-sub">${diff>=0?'+':''}${diff.toFixed(1)}h vs cómputo</div>
+      <div class="stat-val">${fmtHours(extra)}h</div>
+      <div class="stat-sub">${diff>0?`+${fmtHours(diff)}h vs cómputo`:''}</div>
     </div>
     <div class="stat-box night-box">
       <div class="stat-label">Horas nocturnas</div>
-      <div class="stat-val">${stats.night.toFixed(1)}h</div>
+      <div class="stat-val">${fmtHours(stats.night)}h</div>
       <div class="stat-sub">${state.config.nightStart}–${state.config.nightEnd}</div>
     </div>
     <div class="stat-box holiday-box">
       <div class="stat-label">Horas festivas</div>
-      <div class="stat-val">${stats.holiday.toFixed(1)}h</div>
+      <div class="stat-val">${fmtHours(stats.holiday)}h</div>
       <div class="stat-sub">${stats.holidayDays} días festivos</div>
     </div>`;
 
@@ -3638,16 +3756,16 @@ function renderMonthStats() {
           const h1label = `${sh.inicio}–${sh.fin}`;
           const h2label = sh.inicio2 ? ` + ${sh.inicio2}–${sh.fin2}` : '';
           const hoursPerDay = (sh.inicio2 ? calcShiftHours(sh.inicio,sh.fin)+calcShiftHours(sh.inicio2,sh.fin2) : calcShiftHours(sh.inicio,sh.fin));
-          return `<div style="display:flex;align-items:center;gap:10px;background:${sh.color}18;border:1px solid ${sh.color}45;border-radius:8px;padding:7px 10px;">
-            <div style="width:28px;height:28px;border-radius:6px;background:${sh.color}25;border:2px solid ${sh.color};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <span style="color:${sh.color};font-weight:800;font-size:13px;">${sh.letra}</span>
+          return `<div style="display:flex;align-items:center;gap:10px;background:${getSafeShiftColor(sh.color)}18;border:1px solid ${getSafeShiftColor(sh.color)}45;border-radius:8px;padding:7px 10px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:${getSafeShiftColor(sh.color)}25;border:2px solid ${getSafeShiftColor(sh.color)};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="color:${getSafeShiftColor(sh.color)};font-weight:800;font-size:13px;">${sh.letra}</span>
             </div>
             <div style="flex:1;">
-              <div style="font-size:12px;font-weight:700;color:var(--text);">${escapeHtml(sh.nombre)}${sh.inicio2?` <span style="font-size:10px;background:${sh.color};color:#fff;border-radius:3px;padding:1px 4px;vertical-align:middle;">Partido</span>`:''}</div>
-              <div class="text-muted-sm">${h1label}${h2label} · ${hoursPerDay.toFixed(1)}h/día</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text);">${escapeHtml(sh.nombre)}${sh.inicio2?` <span style="font-size:10px;background:${sh.color};color:${getContrastTextColor(sh.color)};border-radius:3px;padding:1px 4px;vertical-align:middle;">Partido</span>`:''}</div>
+              <div class="text-muted-sm">${h1label}${h2label} · ${fmtHours(hoursPerDay)}h/día</div>
             </div>
             <div style="text-align:right;flex-shrink:0;">
-              <div style="font-size:13px;font-weight:800;color:${sh.color};">${totalH.toFixed(1)}h</div>
+              <div style="font-size:13px;font-weight:800;color:${getSafeShiftColor(sh.color)};">${fmtHours(totalH)}h</div>
               <div style="font-size:10px;color:var(--text3);">${days} días</div>
             </div>
           </div>`;
@@ -3666,16 +3784,16 @@ function renderMonthStats() {
           }
           const spHours = getSpecialHours(sp);
           const totalH = c * spHours;
-          return `<div style="display:flex;align-items:center;gap:10px;background:${sp.color}18;border:1px solid ${sp.color}45;border-radius:8px;padding:7px 10px;">
-            <div style="width:28px;height:28px;border-radius:6px;background:${sp.color}25;border:2px solid ${sp.color};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <span style="color:${sp.color};font-weight:800;font-size:13px;">${sp.letra}</span>
+          return `<div style="display:flex;align-items:center;gap:10px;background:${getSafeShiftColor(sp.color)}18;border:1px solid ${getSafeShiftColor(sp.color)}45;border-radius:8px;padding:7px 10px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:${getSafeShiftColor(sp.color)}25;border:2px solid ${getSafeShiftColor(sp.color)};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <span style="color:${getSafeShiftColor(sp.color)};font-weight:800;font-size:13px;">${sp.letra}</span>
             </div>
             <div style="flex:1;">
               <div style="font-size:12px;font-weight:700;color:var(--text);">${escapeHtml(sp.nombre)}</div>
-              <div class="text-muted-sm">${spHours.toFixed(1)}h/día</div>
+              <div class="text-muted-sm">${fmtHours(spHours)}h/día</div>
             </div>
             <div style="text-align:right;flex-shrink:0;">
-              <div style="font-size:13px;font-weight:800;color:${sp.color};">${totalH.toFixed(1)}h</div>
+              <div style="font-size:13px;font-weight:800;color:${getSafeShiftColor(sp.color)};">${fmtHours(totalH)}h</div>
               <div style="font-size:10px;color:var(--text3);">${c} días</div>
             </div>
           </div>`;
@@ -3782,8 +3900,8 @@ function renderResumen() {
       const sp = state.specials.find(x => x.letra === letra);
       if (!sp) return '';
       return `<div style="display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:11px;color:${sp.color};">${escapeHtml(sp.nombre)}</span>
-        <span style="font-size:11px;font-weight:600;color:${sp.color};">${dias} día${dias!==1?'s':''}</span>
+        <span style="font-size:11px;color:${getSafeShiftColor(sp.color)};">${escapeHtml(sp.nombre)}</span>
+        <span style="font-size:11px;font-weight:600;color:${getSafeShiftColor(sp.color)};">${dias} día${dias!==1?'s':''}</span>
       </div>`;
     }).join('');
 
@@ -3791,7 +3909,7 @@ function renderResumen() {
     <div onclick="goToMonth(${m},${y})" style="background:var(--card);border:1px solid ${isCurrent?'var(--accent)':'var(--border)'};border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;">
       <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">
         <div style="font-size:15px;font-weight:800;color:${isCurrent?'var(--accent)':'var(--text)'};">${mnames[m]}</div>
-        <div style="font-size:20px;font-weight:800;color:var(--text);">${totalWorked.toFixed(1)}<span style="font-size:12px;font-weight:600;color:var(--text3);margin-left:2px;">h</span></div>
+        <div style="font-size:20px;font-weight:800;color:var(--text);">${fmtHours(totalWorked)}<span style="font-size:12px;font-weight:600;color:var(--text3);margin-left:2px;">h</span></div>
       </div>
       <!-- Dual progress bar via gradient -->
       <div style="height:6px;border-radius:3px;margin-bottom:10px;background:${barGradient};"></div>
@@ -3799,15 +3917,15 @@ function renderResumen() {
       <div style="display:flex;flex-direction:column;gap:3px;">
         ${extra>0?`<div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:11px;color:var(--extra-bar);">Horas extras</span>
-          <span style="font-size:11px;font-weight:700;color:var(--extra-bar);">+${extra.toFixed(1)}h</span>
+          <span style="font-size:11px;font-weight:700;color:var(--extra-bar);">+${fmtHours(extra)}h</span>
         </div>`:''}
         ${s.night>0?`<div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:11px;color:var(--night);">Horas nocturnas</span>
-          <span style="font-size:11px;font-weight:600;color:var(--night);">${s.night.toFixed(1)}h</span>
+          <span style="font-size:11px;font-weight:600;color:var(--night);">${fmtHours(s.night)}h</span>
         </div>`:''}
         ${s.holiday>0?`<div style="display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:11px;color:var(--holiday);">Horas festivas</span>
-          <span style="font-size:11px;font-weight:600;color:var(--holiday);">${s.holiday.toFixed(1)}h</span>
+          <span style="font-size:11px;font-weight:600;color:var(--holiday);">${fmtHours(s.holiday)}h</span>
         </div>`:''}
         ${specialLines}
         ${s.total===0?`<div class="text-muted-sm">Sin datos registrados</div>`:''}
@@ -3833,27 +3951,27 @@ function renderResumen() {
   document.getElementById('stats-annual').innerHTML = `
     <div class="stat-box ok-box">
       <div class="stat-label">Horas realizadas</div>
-      <div class="stat-val">${annualTotal.toFixed(1)}h</div>
-      <div class="stat-sub">Cómputo: ${annualTarget.toFixed(1)}h</div>
+      <div class="stat-val">${fmtHours(annualTotal)}h</div>
+      <div class="stat-sub">Cómputo: ${fmtHours(annualTarget)}h</div>
     </div>
     <div class="stat-box extra-box">
       <div class="stat-label">Horas extras</div>
-      <div class="stat-val">${annualExtraVsYear.toFixed(1)}h</div>
+      <div class="stat-val">${fmtHours(annualExtraVsYear)}h</div>
       <div class="stat-sub">Sobre el cómputo anual</div>
     </div>
     <div class="stat-box night-box">
       <div class="stat-label">Horas nocturnas</div>
-      <div class="stat-val">${annualNight.toFixed(1)}h</div>
+      <div class="stat-val">${fmtHours(annualNight)}h</div>
       <div class="stat-sub">Todo el año</div>
     </div>
     <div class="stat-box holiday-box">
       <div class="stat-label">Horas festivas</div>
-      <div class="stat-val">${annualHoliday.toFixed(1)}h</div>
+      <div class="stat-val">${fmtHours(annualHoliday)}h</div>
       <div class="stat-sub">Todo el año</div>
     </div>
-    <div class="stat-box ${annualVacationDays > VACATION_DAYS_TOTAL ? 'vacation-excess' : ''}" style="border-color:${vacacionesSpecial?vacacionesSpecial.color+'55':'var(--border)'};--stat-border-base:${vacacionesSpecial?vacacionesSpecial.color+'55':'var(--border)'};">
+    <div class="stat-box ${annualVacationDays > VACATION_DAYS_TOTAL ? 'vacation-excess' : ''}" style="border-color:${vacacionesSpecial?getSafeShiftColor(vacacionesSpecial.color)+'55':'var(--border)'};--stat-border-base:${vacacionesSpecial?getSafeShiftColor(vacacionesSpecial.color)+'55':'var(--border)'};">
       <div class="stat-label">Vacaciones</div>
-      <div class="stat-val" style="color:${vacacionesSpecial?vacacionesSpecial.color:'var(--text)'};">${annualVacationDays} <span style="font-size:13px;font-weight:600;color:var(--text3);">de ${VACATION_DAYS_TOTAL}</span></div>
+      <div class="stat-val" style="color:${vacacionesSpecial?getSafeShiftColor(vacacionesSpecial.color):'var(--text)'};">${annualVacationDays} <span style="font-size:13px;font-weight:600;color:var(--text3);">de ${VACATION_DAYS_TOTAL}</span></div>
       <div class="stat-sub">${(() => {
         const pending = getTotalPendingVacationDays(activeProfileForVacation, y);
         const parts = [];
@@ -3864,9 +3982,9 @@ function renderResumen() {
         return parts.length ? `Vacaciones realizadas (${parts.join(', ')})` : 'Vacaciones realizadas';
       })()}</div>
     </div>
-    <div class="stat-box" style="border-color:${bajaSpecial?bajaSpecial.color+'55':'var(--border)'};">
+    <div class="stat-box" style="border-color:${bajaSpecial?getSafeShiftColor(bajaSpecial.color)+'55':'var(--border)'};">
       <div class="stat-label">Baja</div>
-      <div class="stat-val" style="color:${bajaSpecial?bajaSpecial.color:'var(--text)'};">${annualBajaDays}</div>
+      <div class="stat-val" style="color:${bajaSpecial?getSafeShiftColor(bajaSpecial.color):'var(--text)'};">${annualBajaDays}</div>
       <div class="stat-sub">Días de baja este año</div>
     </div>`;
   document.getElementById('month-breakdown').innerHTML = monthHtml;
@@ -4007,11 +4125,13 @@ function renderPdfTab() {
     </label>`;
   }).join('');
 
-  // Annual: single profile <select>
-  const sel = document.getElementById('pdf-profile-single');
-  sel.innerHTML = profiles.map(p => `<option value="${p.id}">${escapeHtml(profileDisplayName(p))}</option>`).join('');
+  // Annual: single profile picker (themed modal, mirrors profile-switcher)
   const active = getActiveProfile();
-  if (active) sel.value = active.id;
+  const initialProfile = active || profiles[0];
+  if (initialProfile) {
+    document.getElementById('pdf-profile-single').value = initialProfile.id;
+    document.getElementById('pdf-profile-single-btn').textContent = profileDisplayName(initialProfile);
+  }
 
   setPdfMode(pdfExportMode);
 }
@@ -4120,8 +4240,26 @@ function withProfileContext(profile, fn) {
   }
 }
 
+// Formats an hour value for display: whole numbers show with no decimals
+// at all (e.g. "8h" not "8.0h" or "8.000h"); non-whole values keep the
+// requested number of decimal places (1 by default).
+function fmtHours(h, decimals) {
+  decimals = decimals || 1;
+  const factor = Math.pow(10, decimals);
+  const rounded = Math.round(h * factor) / factor;
+  return rounded % 1 === 0 ? String(rounded) : rounded.toFixed(decimals);
+}
+
+// Spanish-locale (comma decimal) version used in the PDF — same "no
+// decimals when the value is whole" rule, 2 decimal places otherwise.
 function fmtHoursEs(h) {
-  return (Math.round(h * 100) / 100).toFixed(2).replace('.', ',');
+  const rounded = Math.round(h * 100) / 100;
+  if (rounded % 1 === 0) return String(rounded);
+  // Trim a trailing zero in the 2-decimal form (8.50 -> 8.5), but keep both
+  // decimals when both are meaningful (8.25 stays 8.25).
+  let str = rounded.toFixed(2);
+  if (str.endsWith('0')) str = str.slice(0, -1);
+  return str.replace('.', ',');
 }
 
 // Builds the 3-row plan for one day: row1/row2/row3 correspond to the top/
@@ -4342,6 +4480,117 @@ function generateSchedulePdf() {
 // helper was redefined locally in 4 different functions.
 function normText(s) {
   return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+// =========================================================
+// THEME-SAFE SHIFT COLORS — a user-picked shift color that reads fine as
+// text/border on a dark background can be unreadable on a light one (and
+// vice versa). These adjust brightness only (hue/saturation the user chose
+// stay untouched) so any color works on either theme.
+// =========================================================
+function hexToHSL(hex) {
+  hex = hex.replace('#','');
+  const r = parseInt(hex.substr(0,2),16)/255;
+  const g = parseInt(hex.substr(2,2),16)/255;
+  const b = parseInt(hex.substr(4,2),16)/255;
+  const max = Math.max(r,g,b), min = Math.min(r,g,b);
+  let h, s, l = (max+min)/2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+    switch (max) {
+      case r: h = (g-b)/d + (g<b?6:0); break;
+      case g: h = (b-r)/d + 2; break;
+      default: h = (r-g)/d + 4;
+    }
+    h /= 6;
+  }
+  return [h*360, s*100, l*100];
+}
+
+function hslToHex(h, s, l) {
+  h/=360; s/=100; l/=100;
+  let r,g,b;
+  if (s === 0) { r=g=b=l; }
+  else {
+    const hue2rgb = (p,q,t) => {
+      if (t<0) t+=1;
+      if (t>1) t-=1;
+      if (t<1/6) return p+(q-p)*6*t;
+      if (t<1/2) return q;
+      if (t<2/3) return p+(q-p)*(2/3-t)*6;
+      return p;
+    };
+    const q = l<0.5 ? l*(1+s) : l+s-l*s;
+    const p = 2*l-q;
+    r = hue2rgb(p,q,h+1/3);
+    g = hue2rgb(p,q,h);
+    b = hue2rgb(p,q,h-1/3);
+  }
+  const toHex = x => Math.round(x*255).toString(16).padStart(2,'0');
+  return '#'+toHex(r)+toHex(g)+toHex(b);
+}
+
+// Adjusts a shift color's lightness so it stays legible as text/border
+// against the APP'S OWN background, whichever theme is currently active.
+// The hue/saturation the user picked (what makes it "that color") is
+// preserved — only how bright/dark it is gets nudged, and only if needed.
+// WCAG-style relative luminance and contrast ratio — used to measure how
+// readable a color actually is against a specific background, instead of
+// guessing from a fixed lightness cutoff.
+function relLuminance(hex) {
+  hex = hex.replace('#','');
+  const toLin = c => { c/=255; return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4); };
+  const r = toLin(parseInt(hex.substr(0,2),16));
+  const g = toLin(parseInt(hex.substr(2,2),16));
+  const b = toLin(parseInt(hex.substr(4,2),16));
+  return 0.2126*r + 0.7152*g + 0.0722*b;
+}
+function contrastRatio(hexA, hexB) {
+  const l1 = relLuminance(hexA), l2 = relLuminance(hexB);
+  const lighter = Math.max(l1,l2), darker = Math.min(l1,l2);
+  return (lighter+0.05)/(darker+0.05);
+}
+
+// The actual "card" background each theme renders shift text on top of —
+// used as the real reference for the contrast check below (a fixed
+// lightness cutoff was tried first but wasn't reliable: the dark themes'
+// backgrounds aren't pure black, so text needed to go lighter than a flat
+// 55% lightness to actually stand out against them).
+const THEME_CARD_COLORS = {
+  'blue-dark':'#1e3a5f',   'blue-light':'#ffffff',
+  'green-dark':'#1c3422',  'green-light':'#ffffff',
+  'red-dark':'#361818',    'red-light':'#ffffff',
+  'violet-dark':'#261838', 'violet-light':'#ffffff',
+};
+
+function getSafeShiftColor(hex) {
+  if (!hex || hex[0] !== '#') return hex;
+  const themeId = state.config.theme || 'blue-dark';
+  const isDark = themeId.endsWith('-dark');
+  const bgColor = THEME_CARD_COLORS[themeId] || (isDark ? '#1e3a5f' : '#ffffff');
+  let [h, s, l] = hexToHSL(hex);
+  const targetRatio = 3.5; // enough for bold, short UI text without forcing every color to near-white/near-black
+  let candidate = hslToHex(h, s, l);
+  let steps = 0;
+  while (contrastRatio(candidate, bgColor) < targetRatio && steps < 24) {
+    l = isDark ? Math.min(100, l + 4) : Math.max(0, l - 4);
+    candidate = hslToHex(h, s, l);
+    steps++;
+    if ((isDark && l >= 100) || (!isDark && l <= 0)) break;
+  }
+  return candidate;
+}
+
+// For a color used as a SOLID/opaque background (e.g. a badge), returns
+// whichever of black/white gives better contrast on top of it. This is
+// about that specific background, not the app's theme.
+function getContrastTextColor(hex) {
+  if (!hex || hex[0] !== '#') return '#000';
+  const r = parseInt(hex.substr(1,2),16), g = parseInt(hex.substr(3,2),16), b = parseInt(hex.substr(5,2),16);
+  const luminance = (0.299*r + 0.587*g + 0.114*b) / 255;
+  return luminance > 0.6 ? '#000' : '#fff';
 }
 
 function escapeHtml(str) {
