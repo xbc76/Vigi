@@ -524,6 +524,32 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
         </div>
       </div>
 
+      <!-- CLOUD SYNC -->
+      <div class="cfg-section" id="cfg-sync">
+        <div class="cfg-section-header" onclick="toggleCfg('cfg-sync')">
+          <div class="cfg-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 110-14 7 7 0 016.7 5H17.5a4.5 4.5 0 010 9z"/></svg>Sincronización en la nube</div>
+          <svg class="cfg-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="cfg-section-body">
+          <p class="text-muted-sm" style="margin-bottom:8px;">Para usar tus datos en varios dispositivos a la vez, necesitas una base de datos <b>Firebase Realtime Database</b> gratuita a tu nombre (Google), ya que esta app no tiene servidor propio. Es gratis y tarda unos minutos: crea un proyecto en <span style="color:var(--accent);">console.firebase.google.com</span>, activa "Realtime Database" en modo de prueba, y copia aquí la URL que te da (algo como "https://tu-proyecto-default-rtdb.firebaseio.com").</p>
+
+          <div class="field"><label>URL de tu base de datos</label><input type="text" id="sync-db-url" placeholder="https://tu-proyecto-default-rtdb.firebaseio.com" onchange="saveSyncSettings()"></div>
+          <div class="field"><label>Código de sincronización</label><input type="text" id="sync-code" placeholder="Una palabra o frase que uses en todos tus dispositivos" onchange="saveSyncSettings()"></div>
+          <p class="text-muted-sm" style="margin-bottom:10px;">Usa la <b>misma URL y el mismo código</b> en cada dispositivo que quieras mantener sincronizado. Cualquiera que sepa este código y esta URL podría leer o cambiar tus datos, así que usa algo que no sea fácil de adivinar.</p>
+
+          <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:10px;user-select:none;">
+            <input type="checkbox" id="sync-enabled-chk" onchange="toggleSyncEnabled(this.checked)" style="width:17px;height:17px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;">
+            <span style="font-size:13px;font-weight:600;color:var(--text);">Sincronización automática activada</span>
+          </label>
+
+          <button class="btn btn-primary btn-full" onclick="syncNow()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+            Sincronizar ahora
+          </button>
+          <p class="text-muted-sm" id="sync-status-label" style="margin-top:8px;text-align:center;">Nunca sincronizado</p>
+        </div>
+      </div>
+
       <!-- INFO -->
       <div class="cfg-section" id="cfg-info">
         <div class="cfg-section-header" onclick="toggleCfg('cfg-info')">
@@ -532,8 +558,8 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
         </div>
         <div class="cfg-section-body">
           <div class="info-row"><span class="ir-label">Aplicación</span><span class="ir-val">Vigi <span style="color:var(--accent);">Studio</span></span></div>
-          <div class="info-row"><span class="ir-label">Versión</span><span class="ir-val" onclick="handleVersionTap()" style="cursor:pointer;user-select:none;">v-1.03.039</span></div>
-          <div class="info-row" id="info-row-date" style="display:none;"><span class="ir-label">Última actualización</span><span class="ir-val">18/07/2026</span></div>
+          <div class="info-row"><span class="ir-label">Versión</span><span class="ir-val" onclick="handleVersionTap()" style="cursor:pointer;user-select:none;">v-2.00.001</span></div>
+          <div class="info-row" id="info-row-date" style="display:none;"><span class="ir-label">Última actualización</span><span class="ir-val">29/07/2026</span></div>
           <div class="info-row"><span class="ir-label">Desarrollador</span><span class="ir-val">Xavibc</span></div>
         </div>
       </div>
@@ -1701,7 +1727,8 @@ let state = {
     nightEnd: "06:00",
     theme: "blue-dark",
     pdfServiceName: "",
-    pdfLogo: null
+    pdfLogo: null,
+    sync: { enabled: false, dbUrl: "", syncCode: "", lastSyncedAt: null, lastLocalChangeAt: null }
   }
 };
 let editingCell = null;
@@ -1722,6 +1749,12 @@ function init() {
   renderCuadrante();
   loadConfigUI();
   updateHeaderMonth();
+  // If cloud sync is on, quietly check for newer data from another device.
+  // syncNow() itself asks for confirmation before ever overwriting anything
+  // on this device, so this is safe to fire automatically.
+  if (state.config.sync && state.config.sync.enabled && state.config.sync.dbUrl && state.config.sync.syncCode) {
+    setTimeout(() => syncNow(), 1200);
+  }
 }
 
 // =========================================================
@@ -1734,6 +1767,7 @@ let _storageWarningShown = false;
 
 function saveAllData() {
   syncStateToActiveProfile();
+  if (state.config.sync) state.config.sync.lastLocalChangeAt = Date.now();
   const shared = {
     shifts: state.shifts,
     specials: state.specials,
@@ -1758,6 +1792,7 @@ function saveAllData() {
       );
     }
   }
+  scheduleAutoSync();
 }
 // Backward-compatible alias used throughout the codebase
 function saveData() { saveAllData(); }
@@ -2800,6 +2835,7 @@ function loadConfigUI() {
   document.getElementById('cfg-hours-month').value = state.config.hoursPerMonth;
   setTimeValue('cfg-night-start', state.config.nightStart);
   setTimeValue('cfg-night-end', state.config.nightEnd);
+  loadSyncSettingsUI();
   updateAnnualHoursDisplay();
   // Set CCAA label
   const lbl = document.getElementById('ccaa-select-label');
@@ -4034,11 +4070,15 @@ function downloadBackup(profileIds) {
   const profilesToInclude = profileIds
     ? profiles.filter(p => profileIds.includes(p.id))
     : profiles; // fallback: all profiles, for any other internal callers
+  // Exclude the cloud-sync URL/code from exported backups — if this file
+  // were ever shared with someone else, that would hand them read/write
+  // access to your synced data.
+  const { sync, ...configForBackup } = state.config;
   const backup = {
     shifts: state.shifts,
     specials: state.specials,
     holidays: state.holidays,
-    config: state.config,
+    config: configForBackup,
     fixedOverrides: state.fixedOverrides,
     easterConfig: state.easterConfig,
     profiles: profilesToInclude,
@@ -4060,7 +4100,7 @@ function uploadBackup(e) {
       if (d.shifts)   state.shifts   = d.shifts;
       if (d.specials) state.specials  = d.specials;
       if (d.holidays) state.holidays  = d.holidays;
-      if (d.config)   state.config    = { ...state.config, ...d.config };
+      if (d.config)   state.config    = { ...state.config, ...d.config, sync: state.config.sync };
       if (d.fixedOverrides) state.fixedOverrides = d.fixedOverrides;
       if (d.easterConfig)   state.easterConfig   = d.easterConfig;
 
@@ -4085,6 +4125,185 @@ function uploadBackup(e) {
   };
   r.readAsText(f);
   e.target.value='';
+}
+
+// =========================================================
+// CLOUD SYNC — uses the user's OWN free Firebase Realtime Database (this
+// app has no server of its own). The "sync code" the person picks is used
+// as the storage path, so any device using the same URL + code reads and
+// writes the same data. Whichever copy (local or cloud) is newer wins,
+// based on a timestamp saved with every change.
+// =========================================================
+function loadSyncSettingsUI() {
+  const cfg = state.config.sync || {};
+  const urlEl = document.getElementById('sync-db-url');
+  const codeEl = document.getElementById('sync-code');
+  const chkEl = document.getElementById('sync-enabled-chk');
+  if (urlEl) urlEl.value = cfg.dbUrl || '';
+  if (codeEl) codeEl.value = cfg.syncCode || '';
+  if (chkEl) chkEl.checked = !!cfg.enabled;
+  updateSyncStatusLabel();
+}
+
+function saveSyncSettings() {
+  state.config.sync.dbUrl = document.getElementById('sync-db-url').value.trim();
+  state.config.sync.syncCode = document.getElementById('sync-code').value.trim();
+  saveData();
+}
+
+function toggleSyncEnabled(checked) {
+  state.config.sync.enabled = checked;
+  saveData();
+  if (checked) syncNow();
+}
+
+function updateSyncStatusLabel() {
+  const el = document.getElementById('sync-status-label');
+  if (!el) return;
+  const t = state.config.sync && state.config.sync.lastSyncedAt;
+  el.textContent = t ? `Última sincronización: ${new Date(t).toLocaleString('es-ES')}` : 'Nunca sincronizado';
+}
+
+// Same shape as the manual backup, plus a timestamp used to decide which
+// copy (local or cloud) is newer. Deliberately excludes the sync URL/code
+// themselves — no reason for that to round-trip through the cloud copy.
+function buildSyncPayload() {
+  syncStateToActiveProfile();
+  const { sync, ...configForSync } = state.config;
+  return {
+    shifts: state.shifts,
+    specials: state.specials,
+    holidays: state.holidays,
+    config: configForSync,
+    fixedOverrides: state.fixedOverrides,
+    easterConfig: state.easterConfig,
+    profiles: profiles,
+    activeProfileId: activeProfileId,
+    lastModified: Date.now(),
+  };
+}
+
+function syncCloudUrl() {
+  const cfg = state.config.sync;
+  if (!cfg || !cfg.dbUrl || !cfg.syncCode) return null;
+  return cfg.dbUrl.replace(/\/$/, '') + '/vigiStudioSync/' + encodeURIComponent(cfg.syncCode) + '.json';
+}
+
+async function pushToCloud(payload) {
+  const url = syncCloudUrl();
+  if (!url) return false;
+  try {
+    const res = await fetch(url, { method: 'PUT', body: JSON.stringify(payload) });
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function pullFromCloud() {
+  const url = syncCloudUrl();
+  if (!url) return null;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+// Applies a full data payload received from the cloud — mirrors what
+// uploadBackup() does when restoring a file, minus the file-reading part.
+function applyCloudData(d) {
+  if (d.shifts)   state.shifts   = d.shifts;
+  if (d.specials) state.specials = d.specials;
+  if (d.holidays) state.holidays = d.holidays;
+  if (d.config)   state.config   = { ...state.config, ...d.config, sync: state.config.sync };
+  if (d.fixedOverrides) state.fixedOverrides = d.fixedOverrides;
+  if (d.easterConfig)   state.easterConfig   = d.easterConfig;
+  if (d.profiles && d.profiles.length) {
+    profiles = d.profiles;
+    activeProfileId = d.activeProfileId && profiles.find(p=>p.id===d.activeProfileId) ? d.activeProfileId : profiles[0].id;
+    loadProfileIntoState(getActiveProfile());
+  }
+  ensureFixedSpecials();
+  state.config.sync.lastSyncedAt = Date.now();
+  saveAllData();
+  applyTheme(state.config.theme, false);
+  updateProfileHeaderUI();
+  loadConfigUI();
+  renderShifts(); renderSpecials(); renderWeeklyHolidays(); renderPunctualHolidays(); renderCCAASection(); renderThemeGrid();
+  renderCuadrante();
+}
+
+// Debounced automatic upload, called after every local save. Only runs
+// when sync is turned on and configured, and skips quietly if offline —
+// the next successful save (or a manual "Sincronizar ahora") will catch up.
+let _syncDebounceTimer = null;
+function scheduleAutoSync() {
+  const cfg = state.config.sync;
+  if (!cfg || !cfg.enabled || !cfg.dbUrl || !cfg.syncCode) return;
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+  clearTimeout(_syncDebounceTimer);
+  _syncDebounceTimer = setTimeout(async () => {
+    const payload = buildSyncPayload();
+    const ok = await pushToCloud(payload);
+    if (ok) {
+      state.config.sync.lastSyncedAt = Date.now();
+      updateSyncStatusLabel();
+    }
+  }, 4000);
+}
+
+// Manual "Sincronizar ahora": pulls the cloud copy, and if it's newer than
+// this device's last local change, asks for confirmation before applying
+// it (since that replaces whatever is on this device right now). Otherwise
+// pushes this device's data up.
+async function syncNow() {
+  const cfg = state.config.sync;
+  if (!cfg.dbUrl || !cfg.syncCode) {
+    showAppAlert('Introduce la URL de tu base de datos y un código de sincronización antes de sincronizar.');
+    return;
+  }
+  const statusEl = document.getElementById('sync-status-label');
+  if (statusEl) statusEl.textContent = 'Sincronizando...';
+
+  const remote = await pullFromCloud();
+  const localPayload = buildSyncPayload();
+
+  if (!remote) {
+    const ok = await pushToCloud(localPayload);
+    if (ok) { state.config.sync.lastSyncedAt = Date.now(); saveData(); }
+    updateSyncStatusLabel();
+    showAppAlert(
+      ok ? 'Subido a la nube correctamente (no había datos previos con ese código).' : 'No se ha podido conectar. Comprueba la URL, el código y tu conexión a internet.',
+      { title: ok ? 'Sincronizado' : 'Error de sincronización', type: ok ? 'warning' : 'danger' }
+    );
+    return;
+  }
+
+  const remoteTime = remote.lastModified || 0;
+  const localTime = (cfg.lastLocalChangeAt || 0);
+
+  if (remoteTime > localTime) {
+    showAppConfirm(
+      `Hay datos más recientes en la nube (${new Date(remoteTime).toLocaleString('es-ES')}) que en este dispositivo. ¿Traerlos aquí? Esto sustituirá los datos actuales de este dispositivo.`,
+      () => {
+        applyCloudData(remote);
+        showAppAlert('Datos actualizados desde la nube.', { title: 'Sincronizado' });
+      },
+      { title: 'Datos más recientes en la nube', confirmLabel: 'Traer de la nube' }
+    );
+    updateSyncStatusLabel();
+  } else {
+    const ok = await pushToCloud(localPayload);
+    if (ok) { state.config.sync.lastSyncedAt = Date.now(); saveData(); }
+    updateSyncStatusLabel();
+    showAppAlert(
+      ok ? 'Sincronizado — este dispositivo tenía los datos más recientes.' : 'No se ha podido subir a la nube. Comprueba la URL, el código y tu conexión.',
+      { title: ok ? 'Sincronizado' : 'Error de sincronización', type: ok ? 'warning' : 'danger' }
+    );
+  }
 }
 
 // =========================================================
