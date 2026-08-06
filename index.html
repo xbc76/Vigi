@@ -55,6 +55,20 @@
   Pareja 4 — Violeta:  dark=violet-dark / light=violet-light  accent #7a48c8
 */
 
+/* OSCURO 5 — Crema noche */
+[data-theme="cream-dark"] {
+  --accent:#b8965a;--primary:#9a7840;--primary-light:#c8a86a;--primary-dark:#7a5a28;
+  --bg:#1c1710;--bg2:#252015;--bg3:#30281a;--card:#3a3022;--card2:#46382a;
+  --text:#f4ead8;--text2:#c8b890;--text3:#9a8868;--border:#5a4830;
+  --extra-bar:#d09020;--holiday:#e06060;
+}
+/* CLARO 5 — Crema día */
+[data-theme="cream-light"] {
+  --accent:#9a7840;--primary:#7a5a28;--primary-light:#b8965a;--primary-dark:#5a4018;
+  --bg:#fdf8ef;--bg2:#f5ede0;--bg3:#ece0cc;--card:#ffffff;--card2:#fdf5e8;
+  --text:#2a2010;--text2:#6a5030;--text3:#9a8060;--border:#d8c8a8;
+  --extra-bar:#c07820;--holiday:#c04040;
+}
 /* OSCURO 1 — Azul noche */
 [data-theme="blue-dark"] {
   --accent:#2d74c8;--primary:#1a56a0;--primary-light:#2d74c8;--primary-dark:#0f3870;
@@ -558,8 +572,8 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font); backgroun
         </div>
         <div class="cfg-section-body">
           <div class="info-row"><span class="ir-label">Aplicación</span><span class="ir-val">Vigi <span style="color:var(--accent);">Studio</span></span></div>
-          <div class="info-row"><span class="ir-label">Versión</span><span class="ir-val" onclick="handleVersionTap()" style="cursor:pointer;user-select:none;">v-2.00.001</span></div>
-          <div class="info-row" id="info-row-date" style="display:none;"><span class="ir-label">Última actualización</span><span class="ir-val">29/07/2026</span></div>
+          <div class="info-row"><span class="ir-label">Versión</span><span class="ir-val" onclick="handleVersionTap()" style="cursor:pointer;user-select:none;">v-2.00.002</span></div>
+          <div class="info-row" id="info-row-date" style="display:none;"><span class="ir-label">Última actualización</span><span class="ir-val">04/08/2026</span></div>
           <div class="info-row"><span class="ir-label">Desarrollador</span><span class="ir-val">Xavibc</span></div>
         </div>
       </div>
@@ -2026,6 +2040,9 @@ const themePairs = [
   { label:'Violeta', accent:'#7a48c8',
     dark:  { id:'violet-dark',  label:'Noche', bg:'#0e0818', bg2:'#160e22', bg3:'#1e142e' },
     light: { id:'violet-light', label:'Día',   bg:'#f5f0fc', bg2:'#ede4f8', bg3:'#e0d2f4' } },
+  { label:'Crema',   accent:'#b8965a',
+    dark:  { id:'cream-dark',   label:'Noche', bg:'#1c1710', bg2:'#252015', bg3:'#30281a' },
+    light: { id:'cream-light',  label:'Día',   bg:'#fdf8ef', bg2:'#f5ede0', bg3:'#ece0cc' } },
 ];
 
 function toggleCfg(id) {
@@ -4782,6 +4799,7 @@ const THEME_CARD_COLORS = {
   'green-dark':'#1c3422',  'green-light':'#ffffff',
   'red-dark':'#361818',    'red-light':'#ffffff',
   'violet-dark':'#261838', 'violet-light':'#ffffff',
+  'cream-dark':'#3a3022',  'cream-light':'#ffffff',
 };
 
 function getSafeShiftColor(hex) {
